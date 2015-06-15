@@ -1,0 +1,26 @@
+id: sns-service-blue-controller
+kind: ReplicationController
+apiVersion: v1beta1
+labels:
+  name: sns-service-blue
+  version: "$SHORT_COMMIT"
+desiredState:
+  replicas: 2
+  replicaSelector:
+    name: sns-service-blue
+    version: "$SHORT_COMMIT"
+  podTemplate:
+    labels:
+      name: sns-service-blue
+      app: sns-service-blue
+      version: "$SHORT_COMMIT"
+    desiredState:
+      manifest:
+        version: v1beta1
+        id: sns-service-blue
+        containers:
+          - name: sns-service-blue
+            image: octoblu/sns-service:$SHORT_COMMIT
+            ports:
+              - containerPort: 80
+

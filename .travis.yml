@@ -1,0 +1,42 @@
+language: node_js
+sudo: false
+cache:
+  bundler: true
+  directories:
+  - node_modules
+node_js:
+- '0.10'
+env:
+  global:
+  - AWS_ACCESS_KEY_ID=AKIAJH2D5IPIRHYJT5IA
+  - DOCKER_USERNAME=octoblu
+  - DEPLOY_APPLICATION_NAME=sns-service
+  - DEPLOY_REGION=us-west-2
+  - DEPLOY_BUCKET=octoblu-deploy
+  - DEPLOYMENT_GROUP=master
+  - DEPLOY_KEY=sns-service/sns-service-$TRAVIS_COMMIT.zip
+  - secure: t2pCmdFgxb69wHQq/Rz1qWeQJa365O7yWxPRwv/mqs++x0cq2KsU75XKsMMj8scBmWytnab5u/UiW32uJINfgGxgiHwwf1Smn323WzbojDDjy+6Sa4B9wYbaPnlhvNR0fY3eyFJXKNyG7m8agTKpKZgIi0/o2arz5fmMQ0qZ8eZKMiMW1WTNuRIva21mYsr+UEhwJ4+ND3UJpYrYdB0RxAUUJyKITbQjjXRBN6Terhr2p6uxEB9mp9xwe/6f2fzrtB5RWVzNMg4WXqu3vGnRfwKTiXzh2BZyb+izvX/tn5CnsiH9//g6d1xKHiy2GQbHZIrziNtzu5HkL9ABcJuqCdaqZyse3cOV2r2NTuKHbA8HiLondVFkzHlrEbA5PYpVM0csk8/REu5Oglr4ZfDaxgkpa/oicTmib4SZpCQMyXRlZdemLtZ26qJAyitaMjmY0uj9RCBMk95oal4XuBq+xwIIrC6mBI2gIouB+sO1fp3mrcLR+4hz7S5PVRymUqxpZ0SZvZESoZPFaGz3p0oL0CDKxHxMBFHzUX8Mf9eK86yzeq8oi1U+LsLUlxNHu4FfrKRrCUa4e+VjYGEBKG6GwC0aH4Xot9QmOtaq7AJN2OCeZXMxjvyJtMbyeT2EhNGtsplXUb0MdErwWoWklhfHjNyStf0v+T6twAANC7uLm90=
+  - secure: ZvsYpkoNFGTTeQgpNFXhiD9+qf7tjMYbT/T1kSDtvN2KdiDu60nQmKvW1AwTnEIHilUvK4TEH32yv1rMWWpDmhuNueHbcCqsADL6Zl3Dr//+8A2G/evPK/bJBruMT2YxwX+26olwrPJisnhOET/ib8IQBbpGtTL1m1EzYFvJDW/ZHxuoM/G7UAe2cAcy0UBIGSbRJ5iqZKvrYJTIIcgHNdn9/wcibp8/+k2dEQmrn3TcRnPq0V6z1+AbfspaeYBTcQsbIV+zCU27cu/HbrKCvBnVguN0RaaBoQQ6juFHxW9gAn6Z3kpT+8dDy7uRPOoYwbjnjplgzIlnIWMPBFM9gJh4PwS2bNbCAfCJxHRpRmU7cEPqfYZC8KTEnPf3xxRt0SY/dCM9i5BRxasL80BgBgVSn5UkxxLBQ468DOaTpqSlOaqJ37ssz96/MDwF+0z+wY0JBdySiaNDwD6x7Xl2zbt8uwe+yl97O7/CTanna2vIrdBcfH9fDH3GLD5b+sNBrnIfaQt04lRn3Y3HdqigDct9l07u1m5XURFxP3yjohLmVTmeHG7fZNl3veLT1ahNIoWw83CbGujpV2N6faPYjBoZ3YvgJkUfqxGropfMcpaxoqQmpZsVtTH2ci+C/agTg+BtjyHhuhd8WPzqjJ+FE2GeEq0jH9xwWytooFXgL3s=
+after_success:
+- .kubernetes/travis_after_success
+deploy:
+- provider: s3
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: &1
+    secure: DNn8J3YUCcdZ/Kekq8nd6iqOHtCZ5SHh4fCmFLS9eW79nZtqlZrldCffbRSYCpbUMZ9zq+Ul79WVeKdIRYs4hYQqwns9hsugD2A1FPouBInVN7Gfe+gi0cZ6wHVPqIXySMukpbOG6Dm0Ybo0E1NIhaJQD5Ab3OYRmBfbZQKAo8t6vzlEIeuLagLL52/titJcefNYaybZPkf+b0TRnCrcMKlQGVRln42BTcxy4sGGXiqXuc9l45bJ2J5m3103Y1fmhNN3IR+zymwjs/PQ/tz4fyic/fdKhrnOMx4OS9WxdoM7uSnrJXyaX7tmcl8rrcpYu3LLNti333yq4LIjplzH4Gn5QYW7ArBk+nD7kPGAonP0vnc/ibC52e6rap5v8qOeCvQn15OqmPXHqoPrRUHRmRNIgniL4A4xnDNg4NMFNX0hcYzaE058NVT3ZMtW8x1/GT5dLWNLGD3labYQk+6zHxVlGD6faUxqRbs49LegDbCmiPhQZYgRx8ZVRYHWEPoJx+PIFyyQnHXuyqEkcL8pfP46s25RO2+VCp+PIf/BWf+S9WNIUaso5M+Ki1+cTLyMIj4fi4Btw0A9GqXmH+cGpCboivvjkpkpL52BDEPvOQ2GvOltUM/KFqOwR4J47kI5cK7KAWVF2wnL8265eSOJbhXkSsfCqV991X37Ahbb2mE=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  bucket: octoblu-deploy
+  on:
+    branch: master
+- provider: codedeploy
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: *1
+  bucket: octoblu-deploy
+  key: docker-builder/sns-service-$TRAVIS_COMMIT.zip
+  bundle_type: zip
+  region: us-west-2
+  application: docker-builder
+  deployment_group: sns-service
+  on:
+    branch: master
