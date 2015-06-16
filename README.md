@@ -1,20 +1,30 @@
 # SNS Service
 
-## Usage
-
 ### Send Message
 
-**Endpoint:** /message
+#### Endpoint
 
-**Body Params:**
-  - arn
-  - deviceId
-  - message
+`POST https://sns.octoblu.com/messages`
 
-**Example**
+#### Headers
 
-````
-curl -XPOST http://sns.octoblu/message \
-  -d '{"arn": "arn:aws:sns:us-west-2:#####:app/APNS_SANDBOX/####", "deviceId":"b73b036f-bfcf-4f2a-bad9-3157e6a6c124", "message": "Hello there friendly device"}' \
-  -H 'Content-Type: application/json'
-````
+  - X-SNS-ARN
+  - X-SNS-Device
+  - X-SNS-Platform (Must be one of: IOS,ANDROID)
+
+#### Body Params
+
+  - devices
+  - topic
+  - payload
+
+#### Example
+
+```bash
+curl -X POST https://sns.octoblu/messages \
+  -H 'Content-Type: application/json' \
+  -H 'X-SNS-ARN: arn:aws:sns:us-west-2:#####:app/APNS_SANDBOX/####' \
+  -H 'X-SNS-Device: b73b036f-bfcf-4f2a-bad9-3157e6a6c124' \
+  -H 'X-SNS-Platform: IOS' \
+  -d '{"devices": "some-uuid", "topic": "push-ye", "payload": "Hello there friendly device"}'
+```

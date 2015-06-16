@@ -5,9 +5,12 @@ class MessageController
   constructor: ->
 
   send: (request, response) =>
-    {deviceId, arn, message} = request.body
-    iosApp = @_createIOSApp(arn)
-    @_addUser iosApp, deviceId, (error, endpoint) =>
+    arn = request.headers['X-SNS-ARN']
+    deviceId = request.headers['X-SNS-Device']
+    platformId = request.headers['X-SNS-Platform']
+
+    app = @_createApp arn, platformId
+    @_addUser app, deviceId, (error, endpoint) =>
       return response.status(500).send error: error.message if error?
       @_sendMessage endpoint, message, (error, messageId) =>
         return response.status(500).send error: error.message if error?
@@ -17,14 +20,14 @@ class MessageController
     data = JSON.stringify type:'meshblu:device'
     app.addUser deviceId, data, callback
 
-  _createIOSApp: (ARN) =>
+  _createApp: (arn, platform) =>
     new SNS
-      platform: SNS.SUPPORTED_PLATFORMS.IOS,
-      region: 'us-west-2',
-      apiVersion: '2010-03-31',
-      accessKeyId: config.SNS_KEY_ID,
-      secretAccessKey: config.SNS_ACCESS_KEY,
-      platformApplicationArn: ARN,
+      platform: SNS.SUPPORTED_PLATFORMS[platform]
+      region: 'us-west-2'
+      apiVersion: '2010-03-31'
+      accessKeyId: config.SNS_KEY_ID
+      secretAccessKey: config.SNS_ACCESS_KEY
+      platformApplicationArn: arn
       sandbox: true
 
   _sendMessage: (endpoint, message, callback=->) =>
