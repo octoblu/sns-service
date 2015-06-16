@@ -1,9 +1,10 @@
-path         = require 'path'
-morgan       = require 'morgan'
-express      = require 'express'
-bodyParser   = require 'body-parser'
-errorHandler = require 'errorhandler'
-Router       = require './app/router'
+path               = require 'path'
+morgan             = require 'morgan'
+express            = require 'express'
+bodyParser         = require 'body-parser'
+errorHandler       = require 'errorhandler'
+meshbluHealthcheck = require 'express-meshblu-healthcheck'
+Router             = require './app/router'
 
 port = process.env.SNS_PORT || process.env.PORT || 8003
 
@@ -13,6 +14,7 @@ app.use bodyParser.json()
 app.use morgan('dev')
 app.use express.static(path.join(__dirname, 'public'))
 app.use errorHandler()
+app.use meshbluHealthcheck()
 
 router = new Router(app)
 router.setup()
