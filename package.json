@@ -18,6 +18,7 @@
   "homepage": "https://github.com/octoblu/sns-service",
   "dependencies": {
     "body-parser": "^1.13.0",
+    "coffee-script": "^1.9.3",
     "errorhandler": "^1.4.0",
     "express": "^4.12.4",
     "express-meshblu-healthcheck": "^1.0.1",
