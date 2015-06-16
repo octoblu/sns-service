@@ -5,9 +5,9 @@ class MessageController
   constructor: ->
 
   send: (request, response) =>
-    arn = request.headers['X-SNS-ARN']
-    deviceId = request.headers['X-SNS-Device']
-    platformId = request.headers['X-SNS-Platform']
+    arn = request.header 'X-SNS-ARN'
+    deviceId = request.header 'X-SNS-Device'
+    platformId = request.header 'X-SNS-Platform'
 
     app = @_createApp arn, platformId
     @_addUser app, deviceId, (error, endpoint) =>
