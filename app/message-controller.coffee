@@ -5,8 +5,8 @@ class MessageController
   constructor: ->
 
   send: (request, response) =>
-    {deviceId, message} = request.body
-    iosApp = @_createIOSApp()
+    {deviceId, arn, message} = request.body
+    iosApp = @_createIOSApp(arn)
     @_addUser iosApp, deviceId, (error, endpoint) =>
       return response.status(500).send error: error.message if error?
       @_sendMessage endpoint, message, (error, messageId) =>
