@@ -1,17 +1,21 @@
 SNS    = require 'sns-mobile'
 config = require './config'
 
-class MessageController
-  send: (request, response) =>
+class DeviceController
+  create: (request, response) =>
     arn = request.header 'X-SNS-ARN'
-    endpoint = request.header 'X-SNS-Endpoint'
+    deviceId = request.header 'X-SNS-Device'
     platformId = request.header 'X-SNS-Platform'
     sandbox = request.header('X-SNS-Sandbox')?.toLocaleLowerCase() == 'true'
 
     app = @_createApp arn, platformId, sandbox
-    app.sendMessage endpoint, JSON.stringify(request.body), (error, messageId) =>
+    @_addUser app, deviceId, (error, endpoint) =>
       return response.status(500).send error: error.message if error?
-      response.status(200).send messageId: messageId
+      response.status(200).send endpoint: endpoint
+
+  _addUser: (app, deviceId, callback=->) =>
+    data = JSON.stringify type:'meshblu:device'
+    app.addUser deviceId, data, callback
 
   _createApp: (arn, platform, sandbox=false) =>
     new SNS
@@ -23,6 +27,4 @@ class MessageController
       platformApplicationArn: arn
       sandbox: sandbox
 
-
-
-module.exports = MessageController
+module.exports = DeviceController
