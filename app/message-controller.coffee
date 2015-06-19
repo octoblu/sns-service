@@ -1,5 +1,6 @@
 SNS    = require 'sns-mobile'
 config = require './config'
+debug  = require('debug')('sns-service:message-controller')
 
 class MessageController
   send: (request, response) =>
@@ -9,9 +10,24 @@ class MessageController
     sandbox = request.header('X-SNS-Sandbox')?.toLocaleLowerCase() == 'true'
 
     app = @_createApp arn, platformId, sandbox
-    app.sendMessage endpoint, JSON.stringify(request.body), (error, messageId) =>
+    message = @_createMessage request.body, sandbox
+
+    app.sendMessage endpoint, message, (error, messageId) =>
       return response.status(500).send error: error.message if error?
       response.status(200).send messageId: messageId
+
+  _createMessage: (message, sandbox) =>
+    key = 'APNS'
+    key = 'APNS_SANDBOX' if sandbox
+
+    frame = {}
+    frame[key] = JSON.stringify({
+      aps:
+        'content-available': 1
+      message: message
+    })
+
+    return frame
 
   _createApp: (arn, platform, sandbox=false) =>
     new SNS
