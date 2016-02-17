@@ -10,14 +10,18 @@ port = process.env.SNS_PORT || process.env.PORT || 8003
 
 app = express();
 app.set 'port', port
+app.use meshbluHealthcheck()
 app.use bodyParser.json()
 app.use morgan('dev')
 app.use express.static(path.join(__dirname, 'public'))
 app.use errorHandler()
-app.use meshbluHealthcheck()
 
 router = new Router(app)
 router.setup()
 
 app.listen app.get('port'), ->
   console.log("SNS Service listing on " + app.get('port'));
+
+process.on 'SIGTERM', =>
+  console.log 'SIGTERM caught, exiting'
+  process.exit 0
