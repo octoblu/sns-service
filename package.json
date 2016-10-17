@@ -1,10 +1,13 @@
 {
   "name": "sns-service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SNS Service",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"No Tests...:(\" && exit 0"
+    "test": "echo \"No Tests...:(\" && exit 0",
+    "coverage": "nyc npm test",
+    "mocha:json": "env NPM_ENV=test mocha --reporter json > coverage/mocha.json",
+    "test:watch": "mocha -w -R mocha-multi --reporter-options spec=-,mocha-osx-reporter=-"
   },
   "repository": {
     "type": "git",
@@ -25,5 +28,11 @@
     "express-meshblu-healthcheck": "^1.0.1",
     "morgan": "^1.6.0",
     "sns-mobile": "^1.1.0"
+  },
+  "devDependencies": {
+    "nyc": "^8.3.0",
+    "mocha-osx-reporter": "^0.1.2",
+    "mocha-multi": "^0.9.1",
+    "mocha": "^2.5.3"
   }
 }
